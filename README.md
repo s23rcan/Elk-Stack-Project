@@ -2,7 +2,7 @@
 
 The files in this repository were used to configure the network depicted below.
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Diagrams/Week_13_ELK_Stack_Project.png)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Diagrams/Week_13_ELK_Stack_Project_v1.png)
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the Azure Cloud Environment file may be used to install only certain pieces of it, such as Filebeat.
 
@@ -32,9 +32,8 @@ Integrating an ELK server allows users to easily monitor the vulnerable VMs for 
 - What does Metricbeat record? It periodically collect metrics from the operating system and from services running on the server. The information collected is sent to the output that you specify, such as Elasticsearch or Logstash.
 
 The configuration details of each machine may be found below.
-_Note: Use the [Markdown Table Generator](http://www.tablesgenerator.com/markdown_tables) to add/remove values from the table_.
 
-
+```
 | Name                 | Function         | IP Address | Operating System |
 |----------------------|------------------|------------|------------------|
 | Jump-Box-Provisioner | Gateway          | 10.0.0.4   | Linux            |
@@ -43,6 +42,7 @@ _Note: Use the [Markdown Table Generator](http://www.tablesgenerator.com/markdow
 | Web-VM-3             | DVWA Containers  | 10.0.0.8   | Linux            |
 | ELK-VM-1             | Configuration VM | 10.2.0.4   | Linux            |
 
+```
 ### Access Policies
 
 The machines on the internal network are not exposed to the public Internet. 
@@ -56,13 +56,16 @@ Machines within the network can only be accessed by Jump Box Provisioner VM , SS
 
 A summary of the access policies in place can be found in the table below.
 
+```
 | Name      | Publicly Accessible  | Allowed IP Addresses                         |
 |-----------|----------------------|----------------------------------------------|
-| Jump Box  | Yes                  | 10.0.0.4 Personal IP Adress                  |
+| Jump Box  | Yes                  | 10.0.0.4 - Personal IP Adress                |
 | Web-VM-1  | No                   | 10.0.0.4                                     |
 | Web-VM-2  | No                   | 10.0.0.4                                     |
 | Web-VM-3  | No                   | 10.0.0.4                                     |  
 | Elk-Server| No                   | 10.0.0.4 - Jump Box - Personal IP\Port 5601  |
+
+```
 
 ### Elk Configuration
 
@@ -81,6 +84,7 @@ The playbook implements the following tasks:
 - Install docker.io
 - Install pip3
 - Install Docker python module
+- Increase virtual memory
 - Creates Elk Container
 - Specificies open ports
 
@@ -113,11 +117,13 @@ These Beats allow us to collect the following information from each machine:
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
 
 SSH into the control node and follow the steps below:
-- Copy the filebeat-playbook.yml file to /etc/ansible/roles
+
+- Copy the ![filebeat-playbook.yml](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Ansible/filebeat_playbook.txt) file to /etc/ansible/roles
 - Update the /etc/ansible/hosts file to include the IP address of the Elk Server VM and webservers.
 - Run the playbook, and navigate to Kibana page at with http://ELKServerPublicIP:5601/app/kibana# to check that the installation worked as expected.
 
-_TODO: Answer the following questions to fill in the blanks:_
+
+
 
 -Which file is the playbook?
   - [ELK-Playbook](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Ansible/elk_playbook.txt) - used to install ELK Server
