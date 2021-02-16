@@ -86,7 +86,7 @@ The playbook implements the following tasks:
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/docker_list.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/elk_docker.PNG)
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
@@ -134,7 +134,7 @@ _TODO: Answer the following questions to fill in the blanks:_
    - /etc/ansible/hosts.cfg ensure you you have input your IP address for the specific machine you;d like to install the ELK server versus the Filebeats.
    
 -Which URL do you navigate to in order to check that the ELK server is running?
-  - http://publicip(elkserver):5601
+  - http://ELKServerPublicIP:5601
   
   
   
