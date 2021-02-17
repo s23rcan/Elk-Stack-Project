@@ -147,7 +147,7 @@ SSH into the control node and follow the steps below:
   
   
  
-  Here is the information about how to setup [Azure Cloud Environment](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Instruction%20-%20Azure%20Cloud%20Environment.md) 
+  And for more info about how to setup for Azure Cloud Setup, you can check [Azure Cloud Environment](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Instruction%20-%20Azure%20Cloud%20Environment.md) here
   
   
   
