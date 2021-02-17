@@ -15,7 +15,7 @@
 
 4- Adding Inbound Security Rules to our Network Security Group. Before adding this rule, we should go to []http://ip4.me adress and check our local machine's IP adress because we will add that IP adress to our first rule to allow connection to our VM from home IP adress only. This will allow us to connect to VM from our local machine but no other machine.
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/4.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/4_security_rules.png)
 
 
 5- Before creating Virtual Machines, first we should create a SSH-Key for out local machine. This way we will not need passwords or on the other hand, to have SSH-Key will make our system more secure because only SSH Public Key can connect to that Virtual Machine.
@@ -25,6 +25,8 @@
   ssh-key generate
   ```
   This command will create us two SSH keys. One for the private key and the other one is publick key. We will use the public key for setting up our Virtual Machine later.
+  
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/5_sshkey.png)
 
 6- Now we can create our first Virtual Machine, lets call it Jump-Box-Provisioner. 
   - select the Resource Group as Red-Team
@@ -41,9 +43,9 @@
 8- Create Virtual Machine and call Web-VM-1. After creating Jump-Box-Provisioner, now we can create our web server virtual machines. For this project we have created 3 of them and named them Web-Vm-1, Web-Vm-2, Web-Vm-3 and only Web-Vm-1 will have the public IP adress and the rest will have Private IP. This way we can use our Jump-Box-Provisioner to control our Web-Vms. And also only our local machine can connect to our Jump-Box-Provisioner VM so this way our system will be more secure.
   - Now lets connect to our jump-Box-Provisoner and creat SSH key here , after that we will use that SSH public key for our Web-Vms. This step will allow us only Jump-Box-Provisioner can connect to Web-Vms because of SSH public key.
 
-9- After Creating Web-Vms and generating SSH key in the Jump-Box-Provisioner VM, we will change the username and password from the VM settings and add our Jump-Box VM's SSH public key here like the picture below.
+9- After Creating Web-Vms and generating SSH key in the Jump-Box-Provisioner VM, we will change the username and password from the VM settings and add our Jump-Box VM's SSH public key here like the picture below and also we will change the username from azureuser to sysadmin.
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/9.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/9_sshkey.png)
 
 
 10- Creating Docker Containers in Jump-Box VM
@@ -166,7 +168,7 @@ remote_user = sysadmin
 
 13- Add Inbound Security Rules
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/13.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/13_Inbound_rules.png)
 
 
 14- Now time to create our Load Balancer and connect all Web-Vms to this Load Balancer group. We will create a Load Balancer and name it Red-Team.
@@ -176,7 +178,7 @@ remote_user = sysadmin
 15- After created the Load Balancer, now we will create our Health Probe and Backend Pools. Lets name the Healt Probe as RedTeamProbe and after that add our 3 Web-Vms to the backend pool.
 
 ![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/14a.PNG)
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/14a.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/Backend_Pool.PNG)
 
 
 
@@ -333,6 +335,62 @@ remote_user = sysadmin
 
 ```
 
+
+- Run the filebeat playbook and should look like this here bewlo
+
+```
+root@b1dea65e61f4:/etc/ansible/roles# ansible-playbook filebeat-playbook.yml 
+
+PLAY [installing and launching filebeat] ************************************************************************************************************
+
+TASK [Gathering Facts] ******************************************************************************************************************************
+ok: [10.0.0.5]
+ok: [10.0.0.6]
+ok: [10.0.0.8]
+
+TASK [download filebeat deb] ************************************************************************************************************************
+[WARNING]: Consider using the get_url or uri module rather than running 'curl'.  If you need to use command because get_url or uri is insufficient
+you can add 'warn: false' to this command task or set 'command_warnings=False' in ansible.cfg to get rid of this message.
+
+changed: [10.0.0.5]
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+TASK [install filebeat deb] *************************************************************************************************************************
+changed: [10.0.0.5]
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+TASK [drop in filebeat.yml] *************************************************************************************************************************
+changed: [10.0.0.5]
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+TASK [enable and configure system module] ***********************************************************************************************************
+changed: [10.0.0.5]
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+TASK [setup filebeat] *******************************************************************************************************************************
+changed: [10.0.0.5]
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+TASK [start filebeat service] ***********************************************************************************************************************
+[WARNING]: Consider using the service module rather than running 'service'.  If you need to use command because service is insufficient you can add
+'warn: false' to this command task or set 'command_warnings=False' in ansible.cfg to get rid of this message.
+
+changed: [10.0.0.5]
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+PLAY RECAP ******************************************************************************************************************************************
+10.0.0.5                  : ok=7    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+10.0.0.6                  : ok=7    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+10.0.0.8                  : ok=7    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+```
+
 - Verify the Installation and Playbook
 - Click to System logs Dashbord
 
@@ -393,7 +451,68 @@ remote_user = sysadmin
     command: service metricbeat start
  ```
  
+ - When the playbook is ready run the playbook and install
+
+```
+root@b1dea65e61f4:/etc/ansible/roles# ansible-playbook metricbeat-playbook.yml 
+
+PLAY [Install metric beat] **************************************************************************************************************************
+
+TASK [Gathering Facts] ******************************************************************************************************************************
+ok: [10.0.0.5]
+ok: [10.0.0.6]
+ok: [10.0.0.8]
+
+TASK [Download metricbeat] **************************************************************************************************************************
+[WARNING]: Consider using the get_url or uri module rather than running 'curl'.  If you need to use command because get_url or uri is insufficient
+you can add 'warn: false' to this command task or set 'command_warnings=False' in ansible.cfg to get rid of this message.
+
+changed: [10.0.0.5]
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+TASK [install metricbeat] ***************************************************************************************************************************
+changed: [10.0.0.5]
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+TASK [drop in metricbeat config] ********************************************************************************************************************
+changed: [10.0.0.5
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+TASK [enable and configure docker module for metric beat] *******************************************************************************************
+changed: [10.0.0.5]
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+TASK [setup metric beat] ****************************************************************************************************************************
+changed: [10.0.0.5]
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+TASK [start metric beat] ****************************************************************************************************************************
+[WARNING]: Consider using the service module rather than running 'service'.  If you need to use command because service is insufficient you can add
+'warn: false' to this command task or set 'command_warnings=False' in ansible.cfg to get rid of this message.
+
+changed: [10.0.0.5]
+changed: [10.0.0.6]
+changed: [10.0.0.8]
+
+PLAY RECAP ******************************************************************************************************************************************
+10.0.0.5                  : ok=7    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+10.0.0.6                  : ok=7    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+10.0.0.8                  : ok=7    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+
+```
+
+
+- After playbook successfully installed
+- Check the metricbeat data if its working
+- Clicke to Docker metrics dashboard to see the graphcis
  
 ![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Kibana/metricbeat_check.PNG)
+
+
 
 ![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/metricbeat.png)	
