@@ -13,7 +13,7 @@
 
 ![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/3.PNG)
 
-4- Adding Inbound Security Rules to our Network Security Group. Before adding this rule, we should go to []http://ip4.me adress and check our local machine's IP adress because we will add that IP adress to our first rule to allow connection to our VM from home IP adress only. This will allow us to connect to VM from our local machine but no other machine.
+4- Adding Inbound Security Rules to our Network Security Group. Before adding this rule, we should go to [IP4.me]http://ip4.me adress and check our local machine's IP adress because we will add that IP adress to our first rule to allow connection to our VM from home IP adress only. This will allow us to connect to VM from our local machine but no other machine.
 
 ![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/4_security_rules.png)
 
