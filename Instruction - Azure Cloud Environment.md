@@ -193,7 +193,7 @@ remote_user = sysadmin
 	- We will create playbook for the installation
 	
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/elk_machine.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/elk_machine_vm.PNG)
 
 
 18 - Finalize the ELK Machine
@@ -201,12 +201,12 @@ remote_user = sysadmin
 	- Start and Attach to docker container
 	- Go to /etc/ansible folder
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/elk_machine.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/docker_container_attach.PNG)
 
 
    - Edit host file
    - Edit ansible file
-   - 
+    
 ![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/elk_host.PNG)
 
 
@@ -264,32 +264,33 @@ remote_user = sysadmin
 	``
 	Lets connect to our ELK machine via SSH 
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/elk_machine.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/elk_ssh.PNG)
 
 
 20-	- Run docker ps -a 
 	- Sudo docker start elk
 	- We can connect our Elk container here also to see log files but for more Visual part lets use the Kibana. If we attach to elk to see log files, it will look like the picture below.
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/elk_attach.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/docker_container_attach.PNG)
 
 
 
 21-  lets Connect to Kibana on the browser using http://ElkMachinePublicIP:5601/app/kibana#/home
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/kibana.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Kibana/kibana_home.PNG)
 	
 22- Lets Install Filebeat on the DVWA Container
-	- Go to Kibana home page
-	- Add Log data
-	- System Logs
-	- Download the Filebeat
-	```
+- Go to Kibana home page
+- Add Log data
+- System Logs
+- Download the Filebeat
+	
+```
 	curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.6.1-amd64.deb
 	sudo dpkg -i filebeat-7.6.1-amd64.deb
-	```
-	- Edit the configuration
-	- Modify /etc/filebeat/filebeat.yml
+```
+- Edit the configuration
+- Modify /etc/filebeat/filebeat.yml
 	
 	```
 	output.elasticsearch:
@@ -300,10 +301,11 @@ remote_user = sysadmin
 	setup.kibana:
   	host: "10.2.0.4:5601"
   	```
-   - Create Filebeat Installation Playbook
-   
-   ```
-   ---
+
+- Create Filebeat Installation Playbook
+
+```
+---
 - name: installing and launching filebeat
   hosts: webservers
   become: yes
@@ -334,7 +336,7 @@ remote_user = sysadmin
 - Verify the Installation and Playbook
 - Click to System logs Dashbord
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/filebeat_verify.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Kibana/filebeat_check.PNG)
 
 ![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/filebeat.PNG)
 
@@ -350,7 +352,7 @@ remote_user = sysadmin
 	sudo dpkg -i metricbeat-7.6.1-amd64.deb
 	```
 - Edit the configuration
-- Modify /etc/filebeat/filebeat.yml
+- Modify /etc/metricbeat/metricbeat.yml
 
 	```
 	output.elasticsearch:
@@ -390,6 +392,8 @@ remote_user = sysadmin
   - name: start metric beat
     command: service metricbeat start
  ```
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/metricbeat_verify.PNG)
+ 
+ 
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Kibana/metricbeat_check.PNG)
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/metricbeat.PNG)	
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/metricbeat.png)	
