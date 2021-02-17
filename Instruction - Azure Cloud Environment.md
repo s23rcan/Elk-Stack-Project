@@ -37,7 +37,7 @@
   
 7- We will add another Inbound Security Rule now, just like the picture below. This step will make our system more secure and only allow the local machine can connect to the Jump Box-Provisoner via SSH which is Port 22. Also we can change the Destionation to Jump-Box-Provisioner's private IP also. 
 
-![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/7.PNG)
+![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Azure_Cloud/7_Inbound_rules.png)
 
 
 8- Create Virtual Machine and call Web-VM-1. After creating Jump-Box-Provisioner, now we can create our web server virtual machines. For this project we have created 3 of them and named them Web-Vm-1, Web-Vm-2, Web-Vm-3 and only Web-Vm-1 will have the public IP adress and the rest will have Private IP. This way we can use our Jump-Box-Provisioner to control our Web-Vms. And also only our local machine can connect to our Jump-Box-Provisioner VM so this way our system will be more secure.
@@ -339,7 +339,7 @@ remote_user = sysadmin
 - Run the filebeat playbook and should look like this here bewlo
 
 ```
-root@b1dea65e61f4:/etc/ansible/roles# ansible-playbook filebeat-playbook.yml 
+root@79f41e54fe6a:/etc/ansible/roles# ansible-playbook filebeat-playbook.yml 
 
 PLAY [installing and launching filebeat] ************************************************************************************************************
 
@@ -391,7 +391,8 @@ PLAY RECAP *********************************************************************
 
 ```
 
-- Verify the Installation and Playbook
+- After playbook successfully installed
+- Check the fileeat data if its working
 - Click to System logs Dashbord
 
 ![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Kibana/filebeat_check.PNG)
@@ -429,24 +430,29 @@ PLAY RECAP *********************************************************************
   hosts: webservers
   become: true
   tasks:
- 
+    # Use command module
   - name: Download metricbeat
-    command: curl -L -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.6.1-amd$
+    command: curl -L -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-7.4.0-amd64.deb
 
+    # Use command module
   - name: install metricbeat
-    command: dpkg -i metricbeat-7.6.1-amd64.deb
+    command: dpkg -i metricbeat-7.4.0-amd64.deb
 
+    # Use copy module
   - name: drop in metricbeat config
     copy:
       src: /etc/ansible/files/metricbeat-config.yml
       dest: /etc/metricbeat/metricbeat.yml
 
+    # Use command module
   - name: enable and configure docker module for metric beat
     command: metricbeat modules enable docker
 
+    # Use command module
   - name: setup metric beat
     command: metricbeat setup
 
+    # Use command module
   - name: start metric beat
     command: service metricbeat start
  ```
@@ -454,7 +460,7 @@ PLAY RECAP *********************************************************************
  - When the playbook is ready run the playbook and install
 
 ```
-root@b1dea65e61f4:/etc/ansible/roles# ansible-playbook metricbeat-playbook.yml 
+root@79f41e54fe6a:/etc/ansible/roles# ansible-playbook metricbeat-playbook.yml 
 
 PLAY [Install metric beat] **************************************************************************************************************************
 
@@ -509,7 +515,7 @@ PLAY RECAP *********************************************************************
 
 - After playbook successfully installed
 - Check the metricbeat data if its working
-- Clicke to Docker metrics dashboard to see the graphcis
+- Click to Docker metrics dashboard to see the graphcis
  
 ![](https://github.com/s23rcan/Elk-Stack-Project/blob/main/Images/Kibana/metricbeat_check.PNG)
 
